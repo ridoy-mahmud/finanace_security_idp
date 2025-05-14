@@ -1,29 +1,32 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { MoreVertical, ChevronDown } from "react-feather"
+import { useState } from "react";
+import { MoreVertical, ChevronDown } from "react-feather";
 
 const TransactionsTable = ({ transactions }) => {
-  const [filterType, setFilterType] = useState("All")
+  const [filterType, setFilterType] = useState("All");
 
-  const filteredTransactions = filterType === "All" ? transactions : transactions.filter((t) => t.type === filterType)
+  const filteredTransactions =
+    filterType === "All"
+      ? transactions
+      : transactions.filter((t) => t.type === filterType);
 
   const getTypeStyle = (type) => {
     switch (type) {
       case "Debit":
-        return "bg-red-100 text-red-600"
+        return "bg-red-100 text-red-600";
       case "Credit":
-        return "bg-green-100 text-green-600"
+        return "bg-green-100 text-green-600";
       case "Transfer":
-        return "bg-blue-100 text-blue-600"
+        return "bg-blue-100 text-blue-600";
       default:
-        return "bg-gray-100 text-gray-600"
+        return "bg-gray-100 text-gray-600";
     }
-  }
+  };
 
   const handleFilterChange = (type) => {
-    setFilterType(type)
-  }
+    setFilterType(type);
+  };
 
   return (
     <div>
@@ -80,19 +83,34 @@ const TransactionsTable = ({ transactions }) => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-blue-600">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+              >
                 Type
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+              >
                 Date
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+              >
                 Details
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+              >
                 Amount
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+              >
                 Balance
               </th>
               <th scope="col" className="relative px-6 py-3">
@@ -104,14 +122,26 @@ const TransactionsTable = ({ transactions }) => {
             {filteredTransactions.map((transaction) => (
               <tr key={transaction.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 py-1 text-xs rounded-full ${getTypeStyle(transaction.type)}`}>
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full ${getTypeStyle(
+                      transaction.type
+                    )}`}
+                  >
                     {transaction.type}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{transaction.date}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.details}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.amount} GHC</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{transaction.balance} GHC</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {transaction.date}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {transaction.details}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {transaction.amount} BDT
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {transaction.balance} BDT
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button className="text-gray-400 hover:text-gray-600">
                     <MoreVertical size={16} />
@@ -123,7 +153,7 @@ const TransactionsTable = ({ transactions }) => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TransactionsTable
+export default TransactionsTable;

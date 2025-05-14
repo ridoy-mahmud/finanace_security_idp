@@ -1,27 +1,32 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import Sidebar from "./components/Sidebar"
-import Header from "./components/Header"
-import Overview from "./pages/Overview"
-import TransactionsPage from "./pages/TransactionsPage"
-import CardsPage from "./pages/CardsPage"
-import InvoicesPage from "./pages/InvoicesPage"
-import GoalsPage from "./pages/GoalsPage"
-import SettingsPage from "./pages/SettingsPage"
-import LoginPage from "./pages/LoginPage"
-import RegisterPage from "./pages/RegisterPage"
-import "./index.css"
+import { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
+import Overview from "./pages/Overview";
+import TransactionsPage from "./pages/TransactionsPage";
+import CardsPage from "./pages/CardsPage";
+import InvoicesPage from "./pages/InvoicesPage";
+import GoalsPage from "./pages/GoalsPage";
+import SettingsPage from "./pages/SettingsPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import "./index.css";
 
 function App() {
-  const [activeTab, setActiveTab] = useState("Overview")
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState("Overview");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [accounts, setAccounts] = useState({
     current: 5400,
     savings: 10200,
-  })
+  });
   const [transactions, setTransactions] = useState([
     {
       id: 1,
@@ -63,111 +68,148 @@ function App() {
       amount: 120,
       balance: 5930,
     },
-  ])
+  ]);
 
   // Check if user is logged in
   useEffect(() => {
-    const storedUser = localStorage.getItem("user")
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser)
-      setUser(parsedUser)
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
 
       // If user has accounts data, use it
       if (parsedUser.accounts) {
-        setAccounts(parsedUser.accounts)
+        setAccounts(parsedUser.accounts);
       }
     }
-    setLoading(false)
-  }, [])
+    setLoading(false);
+  }, []);
 
   // Function to add a new transaction
   const addTransaction = (type, details, amount, accountType = "current") => {
-    const date = new Date()
-    const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${String(date.getFullYear()).slice(2)}`
+    const date = new Date();
+    const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${String(
+      date.getFullYear()
+    ).slice(2)}`;
 
     // Update account balance
-    const newAccounts = { ...accounts }
+    const newAccounts = { ...accounts };
 
     if (type === "Deposit" || type === "Credit") {
-      newAccounts[accountType] += amount
+      newAccounts[accountType] += amount;
     } else if (type === "Withdrawal" || type === "Debit") {
-      newAccounts[accountType] -= amount
+      newAccounts[accountType] -= amount;
     }
 
     // Create new transaction
     const newTransaction = {
       id: transactions.length + 1,
-      type: type === "Deposit" ? "Credit" : type === "Withdrawal" ? "Debit" : type,
+      type:
+        type === "Deposit" ? "Credit" : type === "Withdrawal" ? "Debit" : type,
       date: formattedDate,
       details,
       amount,
       balance: newAccounts[accountType],
-    }
+    };
 
     // Update state
-    setAccounts(newAccounts)
-    setTransactions([newTransaction, ...transactions])
+    setAccounts(newAccounts);
+    setTransactions([newTransaction, ...transactions]);
 
-    return newTransaction
-  }
+    return newTransaction;
+  };
 
   // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem("user")
-    setUser(null)
-  }
+    localStorage.removeItem("user");
+    setUser(null);
+  };
 
   // Protected route component
   const ProtectedRoute = ({ children }) => {
     if (loading) {
-      return <div className="flex h-screen items-center justify-center">Loading...</div>
+      return (
+        <div className="flex h-screen items-center justify-center">
+          Loading...
+        </div>
+      );
     }
 
     if (!user) {
-      return <Navigate to="/login" />
+      return <Navigate to="/login" />;
     }
 
-    return children
-  }
+    return children;
+  };
 
   // Dashboard layout component
   const DashboardLayout = ({ children }) => {
     return (
       <div className="flex h-screen bg-white">
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onLogout={handleLogout}
+        />
         <div className="flex-1 flex flex-col overflow-hidden">
           <Header user={user} onLogout={handleLogout} />
           <main className="flex-1 overflow-y-auto p-6">{children}</main>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   // Render the active tab content
   const renderContent = () => {
     switch (activeTab) {
       case "Overview":
-        return <Overview accounts={accounts} transactions={transactions} user={user} />
+        return (
+          <Overview
+            accounts={accounts}
+            transactions={transactions}
+            user={user}
+          />
+        );
       case "Transactions":
-        return <TransactionsPage accounts={accounts} transactions={transactions} addTransaction={addTransaction} />
+        return (
+          <TransactionsPage
+            accounts={accounts}
+            transactions={transactions}
+            addTransaction={addTransaction}
+          />
+        );
       case "Cards":
-        return <CardsPage />
+        return <CardsPage />;
       case "Invoices":
-        return <InvoicesPage />
+        return <InvoicesPage />;
       case "Goals":
-        return <GoalsPage />
+        return <GoalsPage />;
       case "Settings":
-        return <SettingsPage user={user} />
+        return <SettingsPage user={user} />;
       default:
-        return <Overview accounts={accounts} transactions={transactions} user={user} />
+        return (
+          <Overview
+            accounts={accounts}
+            transactions={transactions}
+            user={user}
+          />
+        );
     }
-  }
+  };
 
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage setUser={setUser} />} />
-        <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage setUser={setUser} />} />
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" /> : <LoginPage setUser={setUser} />}
+        />
+        <Route
+          path="/register"
+          element={
+            user ? <Navigate to="/" /> : <RegisterPage setUser={setUser} />
+          }
+        />
         <Route
           path="/*"
           element={
@@ -178,7 +220,7 @@ function App() {
         />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

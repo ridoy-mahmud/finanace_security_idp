@@ -1,5 +1,13 @@
-"use client"
-import { BarChart2, CreditCard, FileText, Target, Settings, Cloud, LogOut } from "react-feather"
+"use client";
+import {
+  BarChart2,
+  CreditCard,
+  FileText,
+  Target,
+  Settings,
+  Cloud,
+  LogOut,
+} from "react-feather";
 
 const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
   const menuItems = [
@@ -9,7 +17,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
     { id: "Invoices", icon: FileText, label: "Invoices" },
     { id: "Goals", icon: Target, label: "Goals" },
     { id: "Settings", icon: Settings, label: "Settings" },
-  ]
+  ];
 
   return (
     <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
@@ -19,7 +27,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
             <Cloud size={20} />
           </div>
           <div className="ml-3">
-            <h2 className="text-lg font-semibold text-gray-800">Secure Bank</h2>
+            <h2 className="text-lg font-semibold text-gray-800">TrustVault</h2>
           </div>
         </div>
       </div>
@@ -30,7 +38,9 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
               <button
                 onClick={() => setActiveTab(item.id)}
                 className={`flex items-center w-full px-4 py-3 rounded-md transition-colors ${
-                  activeTab === item.id ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-100"
+                  activeTab === item.id
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
                 <item.icon size={20} className="mr-3" />
@@ -50,7 +60,7 @@ const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
