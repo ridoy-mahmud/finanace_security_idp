@@ -17,6 +17,7 @@ import GoalsPage from "./pages/GoalsPage";
 import SettingsPage from "./pages/SettingsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import VerifyOTP from "./pages/VerifyOTP";
 import "./index.css";
 
 function App() {
@@ -139,6 +140,11 @@ function App() {
       return <Navigate to="/login" />;
     }
 
+    // If user is not verified (no OTP verification), redirect to OTP page
+    if (!user.verified && window.location.pathname !== "/verify-otp") {
+      return <Navigate to="/verify-otp" />;
+    }
+
     return children;
   };
 
@@ -208,6 +214,14 @@ function App() {
           path="/register"
           element={
             user ? <Navigate to="/" /> : <RegisterPage setUser={setUser} />
+          }
+        />
+        <Route
+          path="/verify-otp"
+          element={
+            <ProtectedRoute>
+              <VerifyOTP setUser={setUser} />
+            </ProtectedRoute>
           }
         />
         <Route
