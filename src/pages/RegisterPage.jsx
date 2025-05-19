@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
-import { Eye, EyeOff, UserPlus } from "react-feather"
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Eye, EyeOff, UserPlus } from "react-feather";
 
 const RegisterPage = ({ setUser }) => {
   const [formData, setFormData] = useState({
@@ -11,40 +11,40 @@ const RegisterPage = ({ setUser }) => {
     email: "",
     password: "",
     confirmPassword: "",
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError("")
+    e.preventDefault();
+    setError("");
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match")
-      return
+      setError("Passwords do not match");
+      return;
     }
 
     // Validate password strength
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters")
-      return
+      setError("Password must be at least 6 characters");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const { confirmPassword, ...dataToSend } = formData
+      const { confirmPassword, ...dataToSend } = formData;
 
       const response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
@@ -52,28 +52,28 @@ const RegisterPage = ({ setUser }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dataToSend),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Registration failed")
+        throw new Error(data.message || "Registration failed");
       }
 
       // Store user data in localStorage
-      localStorage.setItem("user", JSON.stringify(data.user))
+      localStorage.setItem("user", JSON.stringify(data.user));
 
       // Update app state
-      setUser(data.user)
+      setUser(data.user);
 
-      // Redirect to dashboard
-      navigate("/")
+      // Redirect to OTP verification page
+      navigate("/verify-otp");
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -83,10 +83,15 @@ const RegisterPage = ({ setUser }) => {
             <UserPlus size={24} />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create your account
+        </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Or{" "}
-          <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+          <Link
+            to="/login"
+            className="font-medium text-blue-600 hover:text-blue-500"
+          >
             sign in to your existing account
           </Link>
         </p>
@@ -107,7 +112,10 @@ const RegisterPage = ({ setUser }) => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   First name
                 </label>
                 <div className="mt-1">
@@ -125,7 +133,10 @@ const RegisterPage = ({ setUser }) => {
               </div>
 
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Last name
                 </label>
                 <div className="mt-1">
@@ -144,7 +155,10 @@ const RegisterPage = ({ setUser }) => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email address
               </label>
               <div className="mt-1">
@@ -162,7 +176,10 @@ const RegisterPage = ({ setUser }) => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <div className="mt-1 relative">
@@ -191,7 +208,10 @@ const RegisterPage = ({ setUser }) => {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Confirm password
               </label>
               <div className="mt-1 relative">
@@ -221,7 +241,7 @@ const RegisterPage = ({ setUser }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;
